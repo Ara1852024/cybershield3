@@ -1,6 +1,4 @@
-from CyberShield import app
-
-
+from app import app
 @app.route('/')
 def home():
     return "Cybershield is running!"
