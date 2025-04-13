@@ -1,4 +1,11 @@
-from flask import Flask, request, jsonify
+from CyberShield import app
+
+
+@app.route('/')
+def home():
+    return "Cybershield is running!"
+
+from flask import Flask, request, jsonify, app
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
