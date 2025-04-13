@@ -1,10 +1,5 @@
-from app import app
-@app.route('/')
-def home():
-    return "Cybershield is running!"
-# Trigger redeploy
-
-from flask import Flask, request, jsonify, app
+# app.py
+from flask import Flask, request, jsonify
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -12,6 +7,7 @@ import cv2
 import numpy as np
 import os
 
+# Initialize Flask app
 app = Flask(__name__)
 app.secret_key = "your_secret_key"
 
@@ -54,7 +50,12 @@ def detect_faces(image_array):
     faces = face_cascade.detectMultiScale(gray, 1.1, 4)
     return faces
 
-#Signup
+# Routes
+@app.route('/')
+def home():
+    return "Cybershield is running!"
+
+# Signup route
 @app.route('/signup', methods=['POST'])
 def signup():
     data = request.json
@@ -70,7 +71,7 @@ def signup():
 
     return jsonify({"message": f"User {username} registered successfully!"})
 
-#Login
+# Login route
 @app.route('/login', methods=['POST'])
 def login():
     data = request.json
@@ -84,14 +85,14 @@ def login():
     else:
         return jsonify({"error": "Invalid credentials"}), 401
 
-# Route: Logout
+# Logout route
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return jsonify({"message": "Logged out!"})
 
-#Face Detection (image file upload)
+# Face detection route
 @app.route('/detect_face', methods=['POST'])
 @login_required
 def detect_face():
@@ -108,7 +109,7 @@ def detect_face():
         "user": current_user.username
     })
 
-#Extremist Language Detection
+# Extremist language detection
 @app.route('/detect_text', methods=['POST'])
 @login_required
 def detect_text():
@@ -125,5 +126,6 @@ def detect_text():
     else:
         return jsonify({"status": "safe"})
 
+# Run the app
 if __name__ == '__main__':
     app.run(debug=True)
